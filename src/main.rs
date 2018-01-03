@@ -1,8 +1,6 @@
 /// The size of the memory.
 const MEM_SIZE: usize = 30_000;
 
-
-
 /// Interpret a Brainfuck program from a string.
 /// Return the result string.
 fn bf(prog: &str) -> String {
@@ -29,20 +27,18 @@ fn bf(prog: &str) -> String {
             b'-' => mem[mem_ptr] -= 1,
             b'.' => out.push(mem[mem_ptr]),
             b',' => panic!("Not yet implemented!"),
-            b'[' =>
-                if mem[mem_ptr] == 0 {
-                    seek_matching_bracket(&prog, &mut pc);
-                } else {
-                    // Remember the beginning of the loop for jumping
-                    stack.push(pc);
-                },
-            b']' =>
-                if mem[mem_ptr] == 0 {
-                    stack.pop();
-                } else {
-                    // Jump to the beginning of the loop
-                    pc = stack.pop().expect("Malformed brainfuck program") - 1;
-                },
+            b'[' => if mem[mem_ptr] == 0 {
+                        seek_matching_bracket(&prog, &mut pc);
+                    } else {
+                        // Remember the beginning of the loop for jumping
+                        stack.push(pc);
+                    },
+            b']' => if mem[mem_ptr] == 0 {
+                        stack.pop();
+                    } else {
+                        // Jump to the beginning of the loop
+                        pc = stack.pop().expect("Malformed program") - 1;
+                    },
             _ => {},
         }
 
