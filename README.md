@@ -8,6 +8,8 @@ and isn't meant to be the fastest interpreter out there.
 For installation, Git and Rust cargo are required.
 Install the latest version of Rust with [rustup][rustup].
 
+Create a `program.bf` file, which this application reads the program from.
+
 ```bash
 # Clone the project
 git clone https://github.com/timvisee/brainfuck-rs-simple.git
