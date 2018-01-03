@@ -1,4 +1,6 @@
 # Simple brainfuck interpreter in Rust
+[→ See quick implementation][quick]
+
 A simple [brainfuck][brainfuck] interpreter implemented in the [Rust][rust] language.
 
 This implementation is focussed on simplicity and compactness,
@@ -30,3 +32,4 @@ Check out the [LICENSE](LICENSE) file for more information.
 [rust]: https://rust-lang.org/
 [rustup]: https://rustup.rs/
 [brainfuck]: https://en.wikipedia.org/wiki/Brainfuck
+[quick]: https://github.com/timvisee/brainfuck-rs-quick
