@@ -54,6 +54,7 @@ pub fn bf(prog: &str) -> String {
 }
 
 /// Seek the program counter until a matching bracket for the current one.
+#[inline]
 fn seek_matching_bracket(prog: &Vec<u8>, pc: &mut usize) {
     // Define the balance
     let mut balance = 1;
