@@ -1,3 +1,6 @@
+use std::cmp::{max, min};
+use std::u8;
+
 /// The size of the memory.
 const MEM_SIZE: usize = 30_000;
 
@@ -21,23 +24,23 @@ pub fn bf(prog: &str) -> String {
     // Execute
     while pc < prog.len() {
         match prog[pc] {
-            b'>' => mem_ptr += 1,
-            b'<' => mem_ptr -= 1,
-            b'+' => mem[mem_ptr] += 1,
-            b'-' => mem[mem_ptr] -= 1,
+            b'>' => mem_ptr = min(mem_ptr + 1, MEM_SIZE - 1),
+            b'<' => mem_ptr = max(mem_ptr - 1, 0),
+            b'+' => mem[mem_ptr] = min(mem[mem_ptr] + 1, u8::MAX),
+            b'-' => mem[mem_ptr] = max(mem[mem_ptr] - 1, 0),
             b'.' => out.push(mem[mem_ptr]),
             b',' => panic!("Not yet implemented!"),
             b'[' => if mem[mem_ptr] == 0 {
                         seek_matching_bracket(&prog, &mut pc);
                     } else {
-                        // Remember the beginning of the loop for jumping
+                        // Remember where the loop starts
                         stack.push(pc);
                     },
             b']' => if mem[mem_ptr] == 0 {
-                        stack.pop();
+                        stack.pop().expect("Malformed program");
                     } else {
-                        // Jump to the beginning of the loop
-                        pc = stack.pop().expect("Malformed program") - 1;
+                        // Re-loop
+                        pc = *stack.last().expect("Malformed program");
                     },
             _ => {},
         }
@@ -52,20 +55,19 @@ pub fn bf(prog: &str) -> String {
 
 /// Seek the program counter until a matching bracket for the current one.
 fn seek_matching_bracket(prog: &Vec<u8>, pc: &mut usize) {
-    // Define the balance, skip one position
+    // Define the balance
     let mut balance = 1;
-    *pc += 1;
 
     // Seek until we regained zero balance
-    while balance > 0 {
+    while balance > 0 && *pc < prog.len() {
+        // Increase the program counter
+        *pc += 1;
+
         // Keep track of the balance
         match prog[*pc] {
             b'[' => balance += 1,
             b']' => balance -= 1,
             _ => {},
         }
-
-        // Increase the program counter
-        *pc += 1;
     }
 }
