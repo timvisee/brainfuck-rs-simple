@@ -1,5 +1,9 @@
+extern crate tty_read;
+
 use std::cmp::{max, min};
 use std::u8;
+
+use self::tty_read::TermReader;
 
 /// The size of the memory.
 const MEM_SIZE: usize = 30_000;
@@ -29,7 +33,11 @@ pub fn bf(prog: &str) -> String {
             b'+' => mem[mem_ptr] += 1,
             b'-' => mem[mem_ptr] = max(mem[mem_ptr] - 1, 0),
             b'.' => out.push(mem[mem_ptr]),
-            b',' => panic!("Not yet implemented!"),
+            b',' => mem[mem_ptr] =
+                    TermReader::open_stdin()
+                        .expect("failed to open user input reader")
+                        .read_byte()
+                        .expect("failed to read user input"),
             b'[' => if mem[mem_ptr] == 0 {
                         seek_matching_bracket(&prog, &mut pc);
                     } else {
