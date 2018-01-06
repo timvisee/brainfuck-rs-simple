@@ -26,7 +26,7 @@ pub fn bf(prog: &str) -> String {
         match prog[pc] {
             b'>' => mem_ptr = min(mem_ptr + 1, MEM_SIZE - 1),
             b'<' => mem_ptr = max(mem_ptr - 1, 0),
-            b'+' => mem[mem_ptr] = min(mem[mem_ptr] + 1, u8::MAX),
+            b'+' => mem[mem_ptr] += 1,
             b'-' => mem[mem_ptr] = max(mem[mem_ptr] - 1, 0),
             b'.' => out.push(mem[mem_ptr]),
             b',' => panic!("Not yet implemented!"),
