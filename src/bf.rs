@@ -3,7 +3,7 @@ extern crate tty_read;
 use std::cmp::{max, min};
 use std::u8;
 
-use self::tty_read::TermReader;
+use self::tty_read::{ReaderOptions, TermReader};
 
 /// The size of the memory.
 const MEM_SIZE: usize = 30_000;
@@ -25,6 +25,9 @@ pub fn bf(prog: &str) -> String {
     // Output
     let mut out: Vec<u8> = vec![];
 
+    // Define reader options
+    let reader_options = ReaderOptions::default();
+
     // Execute
     while pc < prog.len() {
         match prog[pc] {
@@ -34,7 +37,7 @@ pub fn bf(prog: &str) -> String {
             b'-' => mem[mem_ptr] = max(mem[mem_ptr] - 1, 0),
             b'.' => out.push(mem[mem_ptr]),
             b',' => mem[mem_ptr] =
-                    TermReader::open_stdin()
+                    TermReader::open_stdin(&reader_options)
                         .expect("failed to open user input reader")
                         .read_byte()
                         .expect("failed to read user input"),
